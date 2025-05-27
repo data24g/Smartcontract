@@ -4,6 +4,7 @@
     "deploy": "node index.js"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
     "starknet": "^6.24.1"
   }
 }

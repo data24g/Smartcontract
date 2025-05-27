@@ -5,7 +5,7 @@ require('dotenv').config(); // Để sử dụng biến môi trường cho priva
 // --- Cấu hình ---
 // Thay đổi nodeUrl để deploy lên mạng khác (ví dụ: Sepolia)
 // Devnet (mặc định):
-const NODE_URL = process.env.STARKNET_NODE_URL || 'http://127.0.0.1:5050/rpc';
+const NODE_URL = process.env.STARKNET_NODE_URL || 'https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_8/Vav5r6Qa2sF1ZvmMQBCHCm6GkynSvW3C';
 // Sepolia Testnet (ví dụ, thay bằng RPC của bạn):
 // const NODE_URL = 'https://starknet-sepolia.public.blastapi.io/rpc/v0_6';
 // const NODE_URL = 'YOUR_SEPOLIA_RPC_ENDPOINT_FROM_INFURA_OR_ALCHEMY';
@@ -19,8 +19,6 @@ const ACCOUNT_ADDRESS = process.env.STARKNET_ACCOUNT_ADDRESS_DEVNET || '0x03289d
 const SIERRA_PATH = 'target/dev/test_BTECToken.contract_class.json'; // Thay đổi nếu tên tệp hoặc đường dẫn khác
 const CASM_PATH = 'target/dev/test_BTECToken.compiled_contract_class.json'; // Thay đổi nếu tên tệp hoặc đường dẫn khác
 
-// --- Tham số Constructor cho hợp đồng BTECToken ---
-// Điều chỉnh các giá trị này cho phù hợp với token của bạn
 const TOKEN_NAME = "BTEC";
 const TOKEN_SYMBOL = "BTEC";
 const TOKEN_DECIMALS = 18; // Số chữ số thập phân của token
@@ -80,8 +78,6 @@ async function main() {
         // ví dụ: decimals: TOKEN_DECIMALS, (nếu constructor nhận decimals)
     };
 
-    // Sử dụng CallData để compile constructor arguments dựa trên ABI
-    // Điều này đảm bảo thứ tự và kiểu dữ liệu chính xác
     const contractCallData = new CallData(compiledSierra.abi);
     let constructorCalldata;
     try {
