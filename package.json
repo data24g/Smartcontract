@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "node index.js"
+  },
+  "dependencies": {
+    "starknet": "^6.24.1"
+  }
+}
