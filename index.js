@@ -12,17 +12,17 @@ const NODE_URL = process.env.STARKNET_NODE_URL || 'http://127.0.0.1:5050/rpc';
 
 // Tài khoản để deploy. Đảm bảo có đủ gas/ETH trên mạng tương ứng.
 // **QUAN TRỌNG**: Không bao giờ hardcode private key trong code production. Sử dụng biến môi trường.
-const PRIVATE_KEY = process.env.STARKNET_PRIVATE_KEY_DEVNET || '0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912'; // Ví dụ cho devnet
-const ACCOUNT_ADDRESS = process.env.STARKNET_ACCOUNT_ADDRESS_DEVNET || '0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec'; // Ví dụ cho devnet
+const PRIVATE_KEY = process.env.STARKNET_PRIVATE_KEY_DEVNET || '0x056903ff462bec69be1593b04eb3e7154b685f5cb680c558d0831c35c452a318'; // Ví dụ cho devnet
+const ACCOUNT_ADDRESS = process.env.STARKNET_ACCOUNT_ADDRESS_DEVNET || '0x03289de1a2058b98137dd0041aed004a44ab3d6c6379286c1914bf08a2243249'; // Ví dụ cho devnet
 
 // Đường dẫn đến tệp Sierra và CASM của hợp đồng đã biên dịch
-const SIERRA_PATH = '../target/dev/test_BTECToken.contract_class.json'; // Thay đổi nếu tên tệp hoặc đường dẫn khác
-const CASM_PATH = '../target/dev/test_BTECToken.compiled_contract_class.json'; // Thay đổi nếu tên tệp hoặc đường dẫn khác
+const SIERRA_PATH = 'target/dev/test_BTECToken.contract_class.json'; // Thay đổi nếu tên tệp hoặc đường dẫn khác
+const CASM_PATH = 'target/dev/test_BTECToken.compiled_contract_class.json'; // Thay đổi nếu tên tệp hoặc đường dẫn khác
 
 // --- Tham số Constructor cho hợp đồng BTECToken ---
 // Điều chỉnh các giá trị này cho phù hợp với token của bạn
-const TOKEN_NAME = "My BTEC Token";
-const TOKEN_SYMBOL = "MBT";
+const TOKEN_NAME = "BTEC";
+const TOKEN_SYMBOL = "BTEC";
 const TOKEN_DECIMALS = 18; // Số chữ số thập phân của token
 const INITIAL_SUPPLY_UNITS = 1000000; // Ví dụ: 1 triệu token (chưa tính decimals)
 const RECIPIENT_ADDRESS = ACCOUNT_ADDRESS; // Địa chỉ nhận toàn bộ supply ban đầu
@@ -33,7 +33,7 @@ const INITIAL_SUPPLY_WITH_DECIMALS = BigInt(INITIAL_SUPPLY_UNITS) * (BigInt(10) 
 async function main() {
     // 1. Kết nối Provider
     const provider = new RpcProvider({ nodeUrl: NODE_URL });
-    console.log(`🔌 Connected to StarkNet node: ${NODE_URL}`);
+    console.log(`Connected to StarkNet node: ${NODE_URL}`);
 
     // 2. Kết nối Account
     if (!PRIVATE_KEY || !ACCOUNT_ADDRESS) {
@@ -41,17 +41,17 @@ async function main() {
         return;
     }
     const account = new Account(provider, ACCOUNT_ADDRESS, PRIVATE_KEY, "1"); // "1" là cairo version cho Account
-    console.log(`🔑 Using account: ${ACCOUNT_ADDRESS}`);
+    console.log(`Using account: ${ACCOUNT_ADDRESS}`);
 
     // (Tùy chọn) Kiểm tra số dư tài khoản
     try {
         const balance = await account.getBalance();
-        console.log(`💰 Account balance: ${num.formatEther(balance)} ETH (approx)`);
+        console.log(`Account balance: ${num.formatEther(balance)} ETH (approx)`);
         if (num.toBigInt(balance) === 0n && NODE_URL.includes('sepolia')) {
-            console.warn("⚠️ Account balance is 0 on Sepolia. Deployment will likely fail. Please fund your account.");
+            console.warn("Account balance is 0 on Sepolia. Deployment will likely fail. Please fund your account.");
         }
     } catch (e) {
-        console.warn("⚠️ Could not fetch account balance:", e.message);
+        console.warn("Could not fetch account balance:", e.message);
     }
 
 
@@ -60,7 +60,7 @@ async function main() {
     try {
         compiledSierra = JSON.parse(fs.readFileSync(SIERRA_PATH, 'utf8'));
         compiledCasm = JSON.parse(fs.readFileSync(CASM_PATH, 'utf8'));
-        console.log(`📄 Loaded contract artifacts: ${SIERRA_PATH} and ${CASM_PATH}`);
+        console.log(`Loaded contract artifacts: ${SIERRA_PATH} and ${CASM_PATH}`);
     } catch (error) {
         console.error("Lỗi đọc tệp contract artifacts:", error.message);
         console.error("Hãy đảm bảo bạn đã chạy `scarb build` và đường dẫn tệp là chính xác.");
@@ -98,7 +98,7 @@ async function main() {
         const constructorName = constructorFunctionAbi.name; // Sẽ là "constructor" hoặc tên bạn đặt
 
         constructorCalldata = contractCallData.compile(constructorName, constructorArgs);
-        console.log(`✅ Constructor calldata compiled for function '${constructorName}':`, constructorCalldata);
+        console.log(`Constructor calldata compiled for function '${constructorName}':`, constructorCalldata);
     } catch (error) {
         console.error("Lỗi khi compile constructor calldata:", error.message);
         console.log("Kiểm tra lại tên và kiểu dữ liệu của các tham số constructor trong hợp đồng Cairo và trong `constructorArgs`.");
