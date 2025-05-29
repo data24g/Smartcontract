@@ -20,8 +20,8 @@ async function myTestFunction() {
     const myArray1 = ['0x0a', 24, 36n];
     const contractCallData = new CallData(compiledTestSierra.abi);
     const contractConstructor = contractCallData.compile('constructor', {
-        name: "BTECToken",
-        symbol: "BTEC",
+        name: "EDENToken",
+        symbol: "EDEN",
         fixed_supply: uint256.bnToUint256("1000000"),
         recipient: "0x03289de1a2058b98137dd0041aed004a44ab3d6c6379286c1914bf08a2243249",// địa chỉ ví của bạn
     });
